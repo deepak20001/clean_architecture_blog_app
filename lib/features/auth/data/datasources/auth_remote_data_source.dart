@@ -22,7 +22,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   /// so it won't cause a dependency b/w AuthRemoteDataSourceImpl & supabase client
   /// so we can switch to any other database in future easily.
   final SupabaseClient supabaseClient;
-  AuthRemoteDataSourceImpl({required this.supabaseClient});
+  const AuthRemoteDataSourceImpl({required this.supabaseClient});
 
   @override
   Future<String> loginWithEmailPassword({

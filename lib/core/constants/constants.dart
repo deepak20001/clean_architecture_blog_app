@@ -8,6 +8,7 @@ class Constants {
   static const alreadyHaveAnAccount = 'Already have an account?';
   static const signIn = 'Sign In';
   static const isMissingText = 'is missing!';
+  static const defaultError = 'An unexpected error occured!';
 }
 
 /// :::::::::::::::: MEDIA-QUERY VALUES ::::::::::::::::::::::::::::::::::::::::

@@ -36,6 +36,7 @@ class _SignUpPageState extends State<SignUpPage> {
     Size size = MediaQuery.sizeOf(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(),
       body: Padding(
         padding: EdgeInsets.all(size.width * numD035),

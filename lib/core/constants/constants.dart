@@ -9,6 +9,7 @@ class Constants {
   static const signIn = 'Sign In';
   static const isMissingText = 'is missing!';
   static const defaultError = 'An unexpected error occured!';
+  static const userIsNull = 'User is null!';
 }
 
 /// :::::::::::::::: MEDIA-QUERY VALUES ::::::::::::::::::::::::::::::::::::::::

@@ -24,8 +24,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
-  _initAuth();
-
   final supabase = await Supabase.initialize(
     url: AppSecrets.supabaseUrl,
     anonKey: AppSecrets.supabaseAnonKey,
@@ -33,6 +31,8 @@ Future<void> initDependencies() async {
 
   /// this will create a single instance of this dependency throughout the life of app
   serviceLocator.registerLazySingleton(() => supabase.client);
+
+  _initAuth();
 }
 
 /// In the code provided, the principle of "depend on interface, not on implementation" (also known as Dependency Inversion Principle) is followed,

@@ -2,6 +2,7 @@ import 'package:blog_app/core/secrets/app_secrets.dart';
 import 'package:blog_app/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:blog_app/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
+import 'package:blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_log_in.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -59,34 +60,41 @@ Future<void> initDependencies() async {
 /// if you want to switch to a different backend (e.g., Firebase), you only need to create new classes that implement the same interfaces (AuthRemoteDataSource and AuthRepository).
 /// Then, you can replace AuthRemoteDataSourceImpl with a FirebaseAuthRemoteDataSource implementation without modifying the business logic that depends on the interface.
 void _initAuth() {
-  serviceLocator.registerFactory<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(
-      serviceLocator<SupabaseClient>(),
-    ),
-  );
-
-  serviceLocator.registerFactory<AuthRepository>(
-    () => AuthRepositoryImpl(
-      serviceLocator<AuthRemoteDataSource>(),
-    ),
-  );
-
-  serviceLocator.registerFactory(
-    () => UserSignUp(
-      serviceLocator<AuthRepository>(),
-    ),
-  );
-
-  serviceLocator.registerFactory(
-    () => UserLogin(
-      serviceLocator<AuthRepository>(),
-    ),
-  );
-
-  serviceLocator.registerLazySingleton(
-    () => AuthBloc(
-      userSignUp: serviceLocator(),
-      userLogin: serviceLocator(),
-    ),
-  );
+  // Data-source
+  serviceLocator
+    ..registerFactory<AuthRemoteDataSource>(
+      () => AuthRemoteDataSourceImpl(
+        serviceLocator<SupabaseClient>(),
+      ),
+    )
+    // Repository
+    ..registerFactory<AuthRepository>(
+      () => AuthRepositoryImpl(
+        serviceLocator<AuthRemoteDataSource>(),
+      ),
+    )
+    // Use-cases
+    ..registerFactory(
+      () => UserSignUp(
+        serviceLocator<AuthRepository>(),
+      ),
+    )
+    ..registerFactory(
+      () => UserLogin(
+        serviceLocator<AuthRepository>(),
+      ),
+    )
+    ..registerFactory(
+      () => CurrentUser(
+        serviceLocator<AuthRepository>(),
+      ),
+    )
+    // Bloc
+    ..registerLazySingleton(
+      () => AuthBloc(
+        userSignUp: serviceLocator<UserSignUp>(),
+        userLogin: serviceLocator<UserLogin>(),
+        currentUser: serviceLocator<CurrentUser>(),
+      ),
+    );
 }

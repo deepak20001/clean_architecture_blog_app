@@ -6,3 +6,5 @@ abstract interface class UseCase<SuccessType, Params> {
   /// SuccessType and params can be different for each use-case so we can take them via generics
   Future<Either<Failure, SuccessType>> call(Params params);
 }
+
+class NoParams {}

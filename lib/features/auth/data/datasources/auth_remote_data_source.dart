@@ -4,6 +4,8 @@ import 'package:blog_app/features/auth/data/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class AuthRemoteDataSource {
+  Session? get currentUserSession;
+
   /// not using fp-dart here as in remote data-source we are only concerned calls made to external data-base,
   /// we don't want any other packages/plugins inside of it.
   Future<UserModel> signUpWithEmailPassword({
@@ -16,6 +18,8 @@ abstract interface class AuthRemoteDataSource {
     required String email,
     required String password,
   });
+
+  Future<UserModel?> getCurrentUserData();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -24,6 +28,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   /// so we can switch to any other database in future easily.
   final SupabaseClient supabaseClient;
   const AuthRemoteDataSourceImpl(this.supabaseClient);
+
+  @override
+  Session? get currentUserSession => supabaseClient.auth.currentSession;
 
   @override
   Future<UserModel> loginWithEmailPassword({
@@ -38,7 +45,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (response.user == null) {
         throw ServerException(message: Constants.userIsNull);
       }
-      return UserModel.fromJson(response.user!.toJson());
+      return UserModel.fromJson(response.user!.toJson()).copyWith(
+        email: currentUserSession!.user.email,
+      );
     } catch (e) {
       throw ServerException(message: e.toString());
     }
@@ -61,7 +70,30 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (response.user == null) {
         throw ServerException(message: Constants.userIsNull);
       }
-      return UserModel.fromJson(response.user!.toJson());
+      return UserModel.fromJson(response.user!.toJson()).copyWith(
+        email: currentUserSession!.user.email,
+      );
+    } catch (e) {
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel?> getCurrentUserData() async {
+    try {
+      if (currentUserSession != null) {
+        /// The data i will get is in list form having data
+        /// [{...}, {...}, {...}, {...}]
+        final userData = await supabaseClient.from('profiles').select().eq(
+              'id',
+              currentUserSession!.user.id,
+            );
+
+        return UserModel.fromJson(userData.first).copyWith(
+          email: currentUserSession!.user.email,
+        );
+      }
+      return null;
     } catch (e) {
       throw ServerException(message: e.toString());
     }

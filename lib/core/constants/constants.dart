@@ -10,6 +10,7 @@ class Constants {
   static const isMissingText = 'is missing!';
   static const defaultError = 'An unexpected error occured!';
   static const userIsNull = 'User is null!';
+  static const userNotLoggedIn = 'User not logged in!';
 }
 
 /// :::::::::::::::: MEDIA-QUERY VALUES ::::::::::::::::::::::::::::::::::::::::

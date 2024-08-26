@@ -5,7 +5,7 @@ import 'package:fpdart/fpdart.dart';
 
 class UserSignUp implements UseCase<String, UserSignUpParams> {
   final AuthRepository authRepository;
-  UserSignUp({required this.authRepository});
+  UserSignUp(this.authRepository);
 
   @override
   Future<Either<Failure, String>> call(params) async {

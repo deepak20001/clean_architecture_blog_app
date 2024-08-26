@@ -7,7 +7,7 @@ import 'package:fpdart/fpdart.dart';
 class AuthRepositoryImpl implements AuthRepository {
   /// Dependency-injection
   final AuthRemoteDataSource remoteDataSource;
-  const AuthRepositoryImpl({required this.remoteDataSource});
+  const AuthRepositoryImpl(this.remoteDataSource);
 
   @override
   Future<Either<Failure, String>> loginWithEmailPassword({

@@ -1,4 +1,4 @@
-import 'package:blog_app/core/common/widgets/common_space.dart';
+import 'package:blog_app/core/common/widgets/space.dart';
 import 'package:blog_app/core/common/widgets/common_text.dart';
 import 'package:blog_app/core/constants/constants.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';

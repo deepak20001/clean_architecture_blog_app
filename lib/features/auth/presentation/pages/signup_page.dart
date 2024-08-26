@@ -1,7 +1,9 @@
-import 'package:blog_app/core/common/widgets/common_space.dart';
+import 'package:blog_app/core/common/widgets/loader.dart';
+import 'package:blog_app/core/common/widgets/space.dart';
 import 'package:blog_app/core/common/widgets/common_text.dart';
 import 'package:blog_app/core/constants/constants.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
+import 'package:blog_app/core/utils/show_snackbar.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/login_page.dart';
 import 'package:blog_app/features/auth/presentation/widgets/auth_field.dart';
@@ -42,75 +44,90 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(),
       body: Padding(
         padding: EdgeInsets.all(size.width * numD035),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CommonText(
-                title: '${Constants.signUp}.',
-                fontSize: size.width * numD1,
-                fontWeight: FontWeight.bold,
-              ),
-              verticalSpace(size.width * numD08),
-              AuthField(
-                hintText: Constants.name,
-                controller: _nameController,
-              ),
-              verticalSpace(size.width * numD035),
-              AuthField(
-                hintText: Constants.email,
-                controller: _emailController,
-              ),
-              verticalSpace(size.width * numD035),
-              AuthField(
-                hintText: Constants.password,
-                controller: _passwordController,
-                isObscureText: true,
-              ),
-              verticalSpace(size.width * numD05),
-              AuthGradientButton(
-                buttonText: Constants.signUp,
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.read<AuthBloc>().add(
-                          AuthSignUp(
-                            name: _nameController.text.trim(),
-                            email: _emailController.text.trim(),
-                            password: _passwordController.text.trim(),
-                          ),
-                        );
-                  }
-                },
-              ),
-              verticalSpace(size.width * numD035),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    LoginPage.route(),
-                    (route) => false,
-                  );
-                },
-                child: RichText(
-                  text: TextSpan(
-                    text: '${Constants.alreadyHaveAnAccount} ',
-                    style: Theme.of(context).textTheme.titleMedium,
-                    children: [
-                      TextSpan(
-                        text: Constants.signIn,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
+        child: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthFailure) {
+              return showSnackBar(context, state.message);
+            }
+          },
+          builder: (context, state) {
+            if (state is AuthLoading) {
+              return const Loader();
+            }
+
+            return Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CommonText(
+                    title: '${Constants.signUp}.',
+                    fontSize: size.width * numD1,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  verticalSpace(size.width * numD08),
+                  AuthField(
+                    hintText: Constants.name,
+                    controller: _nameController,
+                  ),
+                  verticalSpace(size.width * numD035),
+                  AuthField(
+                    hintText: Constants.email,
+                    controller: _emailController,
+                  ),
+                  verticalSpace(size.width * numD035),
+                  AuthField(
+                    hintText: Constants.password,
+                    controller: _passwordController,
+                    isObscureText: true,
+                  ),
+                  verticalSpace(size.width * numD05),
+                  AuthGradientButton(
+                    buttonText: Constants.signUp,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthBloc>().add(
+                              AuthSignUp(
+                                name: _nameController.text.trim(),
+                                email: _emailController.text.trim(),
+                                password: _passwordController.text.trim(),
+                              ),
+                            );
+                      }
+                    },
+                  ),
+                  verticalSpace(size.width * numD035),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        LoginPage.route(),
+                        (route) => false,
+                      );
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        text: '${Constants.alreadyHaveAnAccount} ',
+                        style: Theme.of(context).textTheme.titleMedium,
+                        children: [
+                          TextSpan(
+                            text: Constants.signIn,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
                                   color: AppPallete.gradient2,
                                   fontWeight: FontWeight.bold,
                                 ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

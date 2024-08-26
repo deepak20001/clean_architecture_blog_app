@@ -13,6 +13,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   })  : _userSignUp = userSignUp,
         super(AuthInitial()) {
     on<AuthSignUp>((event, emit) async {
+      emit(AuthLoading());
+
       /// The call() method allows an instance of any class that defines it to emulate a function.
       /// This method supports the same functionality as normal functions such as parameters and return types.
       final res = await _userSignUp(

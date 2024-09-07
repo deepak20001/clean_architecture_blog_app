@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:blog_app/core/common/widgets/common_text.dart';
 import 'package:blog_app/core/common/widgets/space.dart';
 import 'package:blog_app/core/constants/constants.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
+import 'package:blog_app/core/utils/pick_image.dart';
 import 'package:blog_app/features/blog/presentation/widgets/blog_editor.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +23,16 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   List<String> selectedTopics = [];
+  File? image;
+
+  void selectImage() async {
+    final pickedImage = await pickImage();
+    if (pickedImage != null) {
+      setState(() {
+        image = pickedImage;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -49,31 +62,45 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
           padding: EdgeInsets.all(size.width * numD035),
           child: Column(
             children: [
-              DottedBorder(
-                color: AppPallete.borderColor,
-                dashPattern: const [10, 4],
-                radius: Radius.circular(size.width * numD03),
-                borderType: BorderType.RRect,
-                strokeCap: StrokeCap.round,
-                child: SizedBox(
-                  height: size.width * numD45,
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.folder_open,
-                        size: size.width * numD1,
+              GestureDetector(
+                onTap: selectImage,
+                child: image != null
+                    ? ClipRRect(
+                        borderRadius:
+                            BorderRadius.circular(size.width * numD03),
+                        child: Image.file(
+                          image!,
+                          height: size.width * numD55,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : DottedBorder(
+                        color: AppPallete.borderColor,
+                        dashPattern: const [10, 4],
+                        radius: Radius.circular(size.width * numD03),
+                        borderType: BorderType.RRect,
+                        strokeCap: StrokeCap.round,
+                        child: SizedBox(
+                          height: size.width * numD55,
+                          width: double.infinity,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.folder_open,
+                                size: size.width * numD1,
+                              ),
+                              verticalSpace(size.width * numD035),
+                              CommonText(
+                                title: Constants.selectYourImage,
+                                fontSize: size.width * numD035,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      verticalSpace(size.width * numD035),
-                      CommonText(
-                        title: Constants.selectYourImage,
-                        fontSize: size.width * numD035,
-                      ),
-                    ],
-                  ),
-                ),
               ),
               verticalSpace(size.width * numD05),
               SingleChildScrollView(

@@ -11,6 +11,14 @@ class Constants {
   static const defaultError = 'An unexpected error occured!';
   static const userIsNull = 'User is null!';
   static const userNotLoggedIn = 'User not logged in!';
+  static const blogApp = 'Blog App';
+  static const selectYourImage = 'Select your image';
+  static const technology = 'Technology';
+  static const business = 'Business';
+  static const programming = 'Programming';
+  static const entertainment = 'Entertainment';
+  static const blogTitle = 'Blog title';
+  static const blogContent = 'Blog content';
 }
 
 /// :::::::::::::::: MEDIA-QUERY VALUES ::::::::::::::::::::::::::::::::::::::::

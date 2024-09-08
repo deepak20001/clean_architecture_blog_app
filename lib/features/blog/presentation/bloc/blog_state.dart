@@ -14,4 +14,9 @@ final class BlogFailure extends BlogState {
   const BlogFailure(this.error);
 }
 
-final class BlogSuccess extends BlogState {}
+final class BlogUploadSuccess extends BlogState {}
+
+final class BlogDisplaySuccess extends BlogState {
+  final List<Blog> blogs;
+  const BlogDisplaySuccess(this.blogs);
+}

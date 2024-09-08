@@ -153,7 +153,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                 controller: titleController,
                 hintText: Constants.blogTitle,
               ),
-              verticalSpace(size.width * numD05),
+              verticalSpace(size.width * numD03),
               BlogEditor(
                 controller: contentController,
                 hintText: Constants.blogContent,

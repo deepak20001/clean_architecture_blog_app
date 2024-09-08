@@ -60,13 +60,18 @@ class _BlogPageState extends State<BlogPage> {
         }
         if (state is BlogDisplaySuccess) {
           return ListView.builder(
+            physics: const BouncingScrollPhysics(),
             itemCount: state.blogs.length,
             itemBuilder: (context, index) {
               final blog = state.blogs[index];
 
               return BlogCard(
                 blog: blog,
-                color: AppPallete.gradient1,
+                color: index % 3 == 0
+                    ? AppPallete.gradient1
+                    : index % 2 == 0
+                        ? AppPallete.gradient2
+                        : AppPallete.gradient3,
               );
             },
           );

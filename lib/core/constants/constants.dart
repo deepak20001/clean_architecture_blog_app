@@ -21,6 +21,7 @@ class Constants {
   static const blogContent = 'Blog content';
   static const selectImage = 'Please select an image!';
   static const selectTopic = 'Please select atleast one topic!';
+  static const min = 'min';
 }
 
 /// :::::::::::::::: MEDIA-QUERY VALUES ::::::::::::::::::::::::::::::::::::::::

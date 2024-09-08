@@ -1,3 +1,4 @@
+import 'dart:developer' as devtools show log;
 import 'package:blog_app/core/common/cubits/app_user/app_user_cubit.dart';
 import 'package:blog_app/core/usecase/usecase.dart';
 import 'package:blog_app/core/common/entities/user.dart';
@@ -79,5 +80,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void emitAuthSuccess(User user, Emitter<AuthState> emit) {
     _appUserCubit.updateUser(user);
     emit(AuthSuccess(user));
+  }
+
+  @override
+  void onChange(Change<AuthState> change) {
+    super.onChange(change);
+    devtools.log('Blog-Bloc on change -> $change');
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    devtools.log('Blog-Bloc on error -> $error');
   }
 }

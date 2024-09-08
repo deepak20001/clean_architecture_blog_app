@@ -19,6 +19,8 @@ class Constants {
   static const entertainment = 'Entertainment';
   static const blogTitle = 'Blog title';
   static const blogContent = 'Blog content';
+  static const selectImage = 'Please select an image!';
+  static const selectTopic = 'Please select atleast one topic!';
 }
 
 /// :::::::::::::::: MEDIA-QUERY VALUES ::::::::::::::::::::::::::::::::::::::::

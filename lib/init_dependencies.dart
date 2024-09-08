@@ -7,6 +7,11 @@ import 'package:blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_log_in.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog_app/features/blog/data/datasources/blog_remote_data_source.dart';
+import 'package:blog_app/features/blog/data/repositories/blog_repository_impl.dart';
+import 'package:blog_app/features/blog/domain/repositories/blog_repository.dart';
+import 'package:blog_app/features/blog/domain/usecases/upload_blog.dart';
+import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -37,6 +42,7 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton(() => AppUserCubit());
 
   _initAuth();
+  _initBlog();
 }
 
 /// In the code provided, the principle of "depend on interface, not on implementation" (also known as Dependency Inversion Principle) is followed,
@@ -98,6 +104,34 @@ void _initAuth() {
         userLogin: serviceLocator<UserLogin>(),
         currentUser: serviceLocator<CurrentUser>(),
         appUserCubit: serviceLocator<AppUserCubit>(),
+      ),
+    );
+}
+
+void _initBlog() {
+  // Data-source
+  serviceLocator
+    ..registerFactory<BlogRemoteDataSource>(
+      () => BlogRemoteDataSourceImpl(
+        serviceLocator<SupabaseClient>(),
+      ),
+    )
+    // Repository
+    ..registerFactory<BlogRepository>(
+      () => BlogRepositoryImpl(
+        serviceLocator<BlogRemoteDataSource>(),
+      ),
+    )
+    // Use-cases
+    ..registerFactory(
+      () => UploadBlog(
+        serviceLocator<BlogRepository>(),
+      ),
+    )
+    // Bloc
+    ..registerLazySingleton(
+      () => BlogBloc(
+        uploadBlog: serviceLocator<UploadBlog>(),
       ),
     );
 }

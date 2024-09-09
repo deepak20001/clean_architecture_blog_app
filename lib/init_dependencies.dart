@@ -8,6 +8,7 @@ import 'package:blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_log_in.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:blog_app/features/blog/data/datasources/blog_local_data_source.dart';
 import 'package:blog_app/features/blog/data/datasources/blog_remote_data_source.dart';
 import 'package:blog_app/features/blog/data/repositories/blog_repository_impl.dart';
 import 'package:blog_app/features/blog/domain/repositories/blog_repository.dart';
@@ -15,7 +16,9 @@ import 'package:blog_app/features/blog/domain/usecases/get_all_blogs.dart';
 import 'package:blog_app/features/blog/domain/usecases/upload_blog.dart';
 import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// What is Dependency Injection?
@@ -40,12 +43,15 @@ Future<void> initDependencies() async {
     anonKey: AppSecrets.supabaseAnonKey,
   );
 
+  Hive.defaultDirectory = (await getApplicationDocumentsDirectory()).path;
+
   /// this will create a single instance of this dependency throughout the life of app
   serviceLocator.registerLazySingleton(() => supabase.client);
   serviceLocator.registerLazySingleton(() => AppUserCubit());
   serviceLocator.registerFactory(() => InternetConnection());
   serviceLocator.registerFactory<ConnectionChecker>(
       () => ConnectionCheckerImpl(serviceLocator<InternetConnection>()));
+  serviceLocator.registerLazySingleton(() => Hive.box(name: 'blogs'));
 
   _initAuth();
   _initBlog();
@@ -123,10 +129,17 @@ void _initBlog() {
         serviceLocator<SupabaseClient>(),
       ),
     )
+    ..registerFactory<BlogLocalDataSource>(
+      () => BlogLocalDataSourceImpl(
+        serviceLocator(),
+      ),
+    )
     // Repository
     ..registerFactory<BlogRepository>(
       () => BlogRepositoryImpl(
         serviceLocator<BlogRemoteDataSource>(),
+        serviceLocator<BlogLocalDataSource>(),
+        serviceLocator<ConnectionChecker>(),
       ),
     )
     // Use-cases

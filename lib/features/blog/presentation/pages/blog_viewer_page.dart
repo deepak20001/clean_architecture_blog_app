@@ -1,10 +1,12 @@
 import 'package:blog_app/core/common/widgets/common_text.dart';
+import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/common/widgets/space.dart';
 import 'package:blog_app/core/constants/constants.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/calculate_reading_time.dart';
 import 'package:blog_app/core/utils/format_date.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class BlogViewerPage extends StatelessWidget {
@@ -60,9 +62,11 @@ class BlogViewerPage extends StatelessWidget {
                   width: double.infinity,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(size.width * numD03),
-                    child: Image.network(
-                      blog.imageUrl,
-                      fit: BoxFit.cover,
+                    child: CachedNetworkImage(
+                      imageUrl: blog.imageUrl,
+                      placeholder: (context, url) => const Loader(),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
                   ),
                 ),

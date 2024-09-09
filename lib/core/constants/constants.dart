@@ -23,6 +23,19 @@ class Constants {
   static const selectTopic = 'Please select atleast one topic!';
   static const min = 'min';
   static const noInternetConnection = 'No internet connection!';
+
+  static const List<String> topics = [
+    Constants.technology,
+    Constants.business,
+    Constants.programming,
+    Constants.entertainment,
+  ];
+}
+
+class SupaBaseConstants {
+  static const imageStorage = 'blog_images';
+  static const blogsStorage = 'blogs';
+  static const profilesStorage = 'profiles';
 }
 
 /// :::::::::::::::: MEDIA-QUERY VALUES ::::::::::::::::::::::::::::::::::::::::

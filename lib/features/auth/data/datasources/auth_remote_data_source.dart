@@ -88,7 +88,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (currentUserSession != null) {
         /// The data i will get is in list form having data
         /// [{...}, {...}, {...}, {...}]
-        final userData = await supabaseClient.from('profiles').select().eq(
+        final userData = await supabaseClient.from(SupaBaseConstants.profilesStorage).select().eq(
               'id',
               currentUserSession!.user.id,
             );

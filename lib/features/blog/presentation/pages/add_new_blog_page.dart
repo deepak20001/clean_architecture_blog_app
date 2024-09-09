@@ -152,12 +152,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: [
-                        Constants.technology,
-                        Constants.business,
-                        Constants.programming,
-                        Constants.entertainment,
-                      ]
+                      children: Constants.topics
                           .map(
                             (e) => Padding(
                               padding: EdgeInsets.symmetric(

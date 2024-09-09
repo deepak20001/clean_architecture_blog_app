@@ -17,8 +17,8 @@ class CommonText extends StatelessWidget {
     this.fontWeight = FontWeight.normal,
     this.color = AppPallete.whiteColor,
     this.textAlign = TextAlign.start,
-    this.overflow = TextOverflow.ellipsis,
-    this.maxLine = 1,
+    this.overflow,
+    this.maxLine,
   });
 
   @override

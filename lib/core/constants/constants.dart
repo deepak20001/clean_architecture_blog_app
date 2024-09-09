@@ -22,6 +22,7 @@ class Constants {
   static const selectImage = 'Please select an image!';
   static const selectTopic = 'Please select atleast one topic!';
   static const min = 'min';
+  static const noInternetConnection = 'No internet connection!';
 }
 
 /// :::::::::::::::: MEDIA-QUERY VALUES ::::::::::::::::::::::::::::::::::::::::
